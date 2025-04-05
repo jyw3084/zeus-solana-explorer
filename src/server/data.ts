@@ -166,7 +166,12 @@ export async function getSlotLeaders(startSlot: bigint, limit: number) {
 }
 
 export function createSolanaRpcClient() {
-	const url = process.env.NEXT_PUBLIC_MAINNET_RPC_URL;
+	if (typeof window == 'undefined') return;
+
+	const network = localStorage.getItem('network') || 'Mainnet';
+	const url = network === 'Devnet'
+		? process.env.NEXT_PUBLIC_DEVNET_RPC_URL
+		: process.env.NEXT_PUBLIC_MAINNET_RPC_URL;
 	if (!url) return;
 
 	const rpcClient = createSolanaRpc(url);

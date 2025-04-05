@@ -4,10 +4,13 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Input } from "../ui/input";
 import { SearchResult } from "@/utils/types";
+import DropDownSelect from "../DropDownSelect";
+import { useNetwork } from "@/lib/network";
+
 
 export default function HeaderLayout({ children }: { children: React.ReactNode }) {
 	const router = useRouter();
-	// const { network, changeNetwork } = useNetwork();
+	const { network, changeNetwork } = useNetwork();
 
 	const [searchTerm, setSearchTerm] = useState<string>("");
 	const [searchResult, setSearchResult] = useState<SearchResult | null>(null);
@@ -45,36 +48,48 @@ export default function HeaderLayout({ children }: { children: React.ReactNode }
 		setSearchResult(null);
 	};
 
+	const dropDownOptions = [
+		{
+			name: "Mainnet",
+			action: () => changeNetwork("Mainnet"),
+		},
+		{
+			name: "Devnet",
+			action: () => changeNetwork("Devnet"),
+		},
+	];
+
 	return (
-		<div className="h-[100%] overflow-hidden flex flex-col text-[#000000] relative">
+		<div className="h-[100%] overflow-hidden flex flex-col relative">
 			<div className="between border-b border-[#E5E7EB] dark:border-[#374151] bg-whiteBg dark:bg-darkBg text-white-text dark:text-dark-text px-5 h-[80px]">
-				<div className="container mx-auto p-8 relative">
-					<Input
-						onChange={handleSearchChange}
-						value={searchTerm}
-						placeholder="Search block or transaction..."
-						className="w-[450px] border border-[#D1D5DB] dark:border-[#4B5563] rounded-[8px] text-white"
-					/>
-					{searchResult && (
-						<div
-							className="absolute min-w-[450px] bg-white dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-[#D1D5DB] dark:border-[#4B5563] rounded-[8px] mt-1 p-4 cursor-pointer"
-							onClick={handleResultClick}
-						>
-							<p className="text-sm text-gray-500 dark:text-gray-400">
-								{searchResult.type}
-							</p>
-							<p className="text-md text-black dark:text-white">
-								{searchResult.value}
-							</p>
-						</div>
-					)}
-				</div>
-				<div className="flex gap-6 items-center">
-					{/* <DropDownSelect
-						cta="Select Network"
-						options={dropDownOptions}
-						active={network}
-					/> */}
+				<div className="container mx-auto p-8 flex justify-between items-center">
+					<div className="relative">
+						<Input
+							onChange={handleSearchChange}
+							value={searchTerm}
+							placeholder="Search block or transaction..."
+							className="w-[450px] border border-[#D1D5DB] dark:border-[#4B5563] rounded-[8px] text-white"
+						/>
+						{searchResult && (
+							<div
+								className="absolute min-w-[450px] bg-white dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-[#D1D5DB] dark:border-[#4B5563] rounded-[8px] mt-1 p-4 cursor-pointer"
+								onClick={handleResultClick}
+							>
+								<p className="text-sm text-gray-500 dark:text-gray-400">
+									{searchResult.type}
+								</p>
+								<p className="text-md text-black dark:text-white">
+									{searchResult.value}
+								</p>
+							</div>
+						)}
+					</div>
+					<div>
+						<DropDownSelect
+							options={dropDownOptions}
+							active={network}
+						/>
+					</div>
 				</div>
 			</div>
 			<div
