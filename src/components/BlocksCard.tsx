@@ -7,11 +7,16 @@ import { getBlocksWithLimit, getSingleBlockTime } from '@/server/data';
 import Link from 'next/link';
 import { BLOCKS_PER_PAGE } from '@/data/constants';
 import { UnixTimestamp } from '@solana/web3.js';
-import { BlockDataWithTimestamp } from '@/utils/types';
 import { ArrowUpDown } from 'lucide-react';
+import { Alert, AlertDescription } from './ui/alert';
+
+export interface BlockDataWithTimestamp {
+	slot: bigint;
+	timestamp: UnixTimestamp | null;
+}
 
 export default function BlocksCard() {
-	const { epochInfo } = useCluster();
+	const { epochInfo, loading, error } = useCluster();
 	const [blocks, setBlocks] = useState<BlockDataWithTimestamp[]>([]);
 	const [loadingMore, setLoadingMore] = useState(false);
 	const [sortField, setSortField] = useState<'slot' | 'timestamp'>('slot');
@@ -25,7 +30,7 @@ export default function BlocksCard() {
 			const blocksWithTime = await Promise.all(
 				blockNumbers.map(async (slot) => {
 					const timestamp = await getSingleBlockTime(slot);
-					return { slot, timestamp };
+					return { slot, timestamp: timestamp ?? null };
 				})
 			);
 
@@ -73,6 +78,42 @@ export default function BlocksCard() {
 			return direction * (timestampB - timestampA);
 		}
 	});
+
+	if (loading) {
+		return (
+			<Card>
+				<CardHeader>
+					<CardTitle>
+						<h2 className="text-lg font-semibold">Blocks</h2>
+					</CardTitle>
+				</CardHeader>
+				<CardContent className="p-6">
+					<div className="flex items-center justify-center">
+						<div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" />
+					</div>
+				</CardContent>
+			</Card>
+		);
+	}
+
+	if (error) {
+		return (
+			<Card>
+				<CardHeader>
+					<CardTitle>
+						<h2 className="text-lg font-semibold">Blocks</h2>
+					</CardTitle>
+				</CardHeader>
+				<CardContent className="p-6">
+					<Alert variant="destructive">
+						<AlertDescription>
+							Failed to load blocks
+						</AlertDescription>
+					</Alert>
+				</CardContent>
+			</Card>
+		);
+	}
 
 	return (
 		<Card>

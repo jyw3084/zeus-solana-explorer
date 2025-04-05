@@ -4,6 +4,9 @@ import { Table, TableBody, TableRow, TableCell, TableHeader, TableHead } from '.
 import { Button } from './ui/button';
 import { useBlock } from '@/providers/block';
 import { useEffect, useState } from 'react';
+import { Alert, AlertDescription } from './ui/alert';
+import { FetchStatus } from '@/utils/types';
+import { TransactionError } from '@solana/web3.js';
 
 interface TransactionWithMeta {
 	transaction: {
@@ -11,7 +14,7 @@ interface TransactionWithMeta {
 	};
 	meta: {
 		fee: number;
-		err: any | null;
+		err: TransactionError | null;
 		computeUnitsConsumed?: number;
 	};
 }
@@ -19,15 +22,43 @@ interface TransactionWithMeta {
 export default function TransactionsCard({ slot }: { slot: string }) {
 	const slotNum = BigInt(slot);
 	const { blockInfo, getBlock, status } = useBlock();
+	const { block } = blockInfo || {};
+
 	const [displayCount, setDisplayCount] = useState(40);
 
 	useEffect(() => {
 		getBlock(slotNum);
 	}, [slotNum]);
 
-	const displayedTransactions = blockInfo?.block.transactions?.slice(0, displayCount) || [];
-	const hasMoreTransactions = blockInfo?.block.transactions
-		? blockInfo.block.transactions.length > displayCount
+	if (status === FetchStatus.Fetching) {
+		return (
+			<Card>
+				<CardContent className="p-6">
+					<div className="flex items-center justify-center">
+						<div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" />
+					</div>
+				</CardContent>
+			</Card>
+		);
+	}
+
+	if (status === FetchStatus.FetchFailed || !blockInfo) {
+		return (
+			<Card>
+				<CardContent className="p-6">
+					<Alert variant="destructive">
+						<AlertDescription>
+							Failed to load transactions
+						</AlertDescription>
+					</Alert>
+				</CardContent>
+			</Card>
+		);
+	}
+
+	const displayedTransactions = block?.transactions?.slice(0, displayCount) || [];
+	const hasMoreTransactions = block?.transactions
+		? block.transactions.length > displayCount
 		: false;
 
 	const handleLoadMore = () => {

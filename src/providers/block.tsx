@@ -51,8 +51,6 @@ export function BlockProvider({ children }: { children: ReactNode }) {
 		}
 	}
 
-	console.log(blockInfo);
-
 	return (
 		<BlockContext.Provider value={{
 			blockInfo,

@@ -2,14 +2,43 @@ import { useBlock } from '@/providers/block';
 import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
 import { Table, TableBody, TableRow, TableCell } from './ui/table';
 import { useEffect } from 'react';
+import { Alert, AlertDescription } from './ui/alert'; // Add this import
+import { FetchStatus } from '@/utils/types';
 
 export default function BlockInfoCard({ slot }: { slot: string }) {
 	const slotNum = BigInt(slot);
 	const { blockInfo, getBlock, status } = useBlock();
+	const { block, blockLeader, parentLeader, childLeader, childSlot } = blockInfo || {};
 
 	useEffect(() => {
 		getBlock(slotNum);
 	}, [slotNum]);
+
+	if (status === FetchStatus.Fetching) {
+		return (
+			<Card>
+				<CardContent className="p-6">
+					<div className="flex items-center justify-center">
+						<div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" />
+					</div>
+				</CardContent>
+			</Card>
+		);
+	}
+
+	if (status === FetchStatus.FetchFailed || !blockInfo) {
+		return (
+			<Card>
+				<CardContent className="p-6">
+					<Alert variant="destructive">
+						<AlertDescription>
+							Failed to load block information
+						</AlertDescription>
+					</Alert>
+				</CardContent>
+			</Card>
+		);
+	}
 
 	return (
 		<Card>
@@ -23,7 +52,7 @@ export default function BlockInfoCard({ slot }: { slot: string }) {
 					<TableBody>
 						<TableRow>
 							<TableCell className="font-medium">Block Hash</TableCell>
-							<TableCell className="text-right">{blockInfo?.block?.blockhash?.toString()}</TableCell>
+							<TableCell className="text-right">{block?.blockhash?.toString() || 'N/A'}</TableCell>
 						</TableRow>
 						<TableRow>
 							<TableCell className="font-medium">Slot</TableCell>
@@ -31,43 +60,43 @@ export default function BlockInfoCard({ slot }: { slot: string }) {
 						</TableRow>
 						<TableRow>
 							<TableCell className="font-medium">Slot Leader</TableCell>
-							<TableCell className="text-right">{blockInfo?.blockLeader.toString()}</TableCell>
+							<TableCell className="text-right">{blockLeader?.toString() || 'N/A'}</TableCell>
 						</TableRow>
 						<TableRow>
 							<TableCell className="font-medium">Timestamp (Local)</TableCell>
-							<TableCell className="text-right">{blockInfo?.block.blockTime ? new Date(Number(blockInfo?.block.blockTime) * 1000).toLocaleString() : 'N/A'}</TableCell>
+							<TableCell className="text-right">{block?.blockTime ? new Date(Number(block?.blockTime) * 1000).toLocaleString() : 'N/A'}</TableCell>
 						</TableRow>
 						<TableRow>
 							<TableCell className="font-medium">Timestamp (UTC)</TableCell>
-							<TableCell className="text-right">{blockInfo?.block.blockTime ? new Date(Number(blockInfo?.block.blockTime) * 1000).toLocaleString('en-US', { timeZone: 'UTC' }) : 'N/A'}</TableCell>
+							<TableCell className="text-right">{block?.blockTime ? new Date(Number(block?.blockTime) * 1000).toLocaleString('en-US', { timeZone: 'UTC' }) : 'N/A'}</TableCell>
 						</TableRow>
 						<TableRow>
 							<TableCell className="font-medium">Block Height</TableCell>
-							<TableCell className="text-right">{blockInfo?.block.blockHeight}</TableCell>
+							<TableCell className="text-right">{block?.blockHeight}</TableCell>
 						</TableRow>
 						<TableRow>
 							<TableCell className="font-medium">Parent Slot</TableCell>
-							<TableCell className="text-right">{blockInfo?.block.parentSlot}</TableCell>
+							<TableCell className="text-right">{block?.parentSlot}</TableCell>
 						</TableRow>
 						<TableRow>
 							<TableCell className="font-medium">Parent Slot Leader</TableCell>
-							<TableCell className="text-right">{blockInfo?.parentLeader?.toString()}</TableCell>
+							<TableCell className="text-right">{parentLeader?.toString()}</TableCell>
 						</TableRow>
 						<TableRow>
 							<TableCell className="font-medium">Child Slot</TableCell>
-							<TableCell className="text-right">{blockInfo?.childSlot?.toString()}</TableCell>
+							<TableCell className="text-right">{childSlot?.toString()}</TableCell>
 						</TableRow>
 						<TableRow>
 							<TableCell className="font-medium">Child Slot Leader</TableCell>
-							<TableCell className="text-right">{blockInfo?.childLeader?.toString()}</TableCell>
+							<TableCell className="text-right">{childLeader?.toString()}</TableCell>
 						</TableRow>
 						<TableRow>
 							<TableCell className="font-medium">Number of Transactions</TableCell>
-							<TableCell className="text-right">{blockInfo?.block.transactions?.length || 0}</TableCell>
+							<TableCell className="text-right">{block?.transactions?.length || 0}</TableCell>
 						</TableRow>
 					</TableBody>
 				</Table>
 			</CardContent>
 		</Card>
-	)
+	);
 }

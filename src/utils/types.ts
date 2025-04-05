@@ -1,24 +1,3 @@
-import { UnixTimestamp } from "@solana/web3.js";
-
-export interface ClusterContextType {
-	epochInfo: EpochInfo | undefined;
-	samples: ReadonlyArray<{
-		readonly numSlots: bigint;
-		readonly samplePeriodSecs: number;
-		readonly numTransactions: bigint;
-		readonly numNonVoteTransactions: bigint;
-		readonly slot: bigint;
-	}> | undefined;
-}
-
-export type EpochInfo = {
-	absoluteSlot: bigint;
-	blockHeight: bigint;
-	epoch: bigint;
-	slotIndex: bigint;
-	slotsInEpoch: bigint;
-};
-
 export type EpochSchedule = {
 	slotsPerEpoch: bigint;
 	leaderScheduleSlotOffset: bigint;
@@ -31,11 +10,6 @@ export type SearchResult = {
 	type: "Transaction" | "Block" | "Invalid";
 	value: string;
 } | null;
-
-export interface BlockDataWithTimestamp {
-	slot: bigint;
-	timestamp: UnixTimestamp | null;
-}
 
 export enum FetchStatus {
 	Fetching = 'fetching',
