@@ -1,3 +1,5 @@
+import { UnixTimestamp } from "@solana/web3.js";
+
 export type EpochSchedule = {
 	slotsPerEpoch: bigint;
 	leaderScheduleSlotOffset: bigint;
@@ -25,29 +27,10 @@ export interface BlockContextType {
 
 export interface BlockData {
 	blockhash: string;
-	parentSlot: number;
+	parentSlot: bigint;
 	previousBlockhash: string;
-	blockTime: number | null;
-	blockHeight: number | null;
-	transactions: Array<{
-		transaction: {
-			message: {
-				accountKeys: string[];
-				instructions: any[];
-				recentBlockhash: string;
-			};
-			signatures: string[];
-		};
-		meta: {
-			err: any | null;
-			fee: number;
-			postBalances: number[];
-			preBalances: number[];
-			status: {
-				Ok: null | any;
-			};
-		};
-	}>;
+	blockTime: UnixTimestamp | null;
+	blockHeight: bigint | null;
 }
 
 export interface Block {

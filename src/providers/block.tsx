@@ -16,9 +16,9 @@ export function BlockProvider({ children }: { children: ReactNode }) {
 		try {
 			const block = await getBlock(slot);
 
-			if (block === null) {
+			if (!block) {
 				setBlockInfo({});
-				setStatus(FetchStatus.Fetched);
+				setStatus(FetchStatus.FetchFailed);
 				return;
 			}
 
@@ -30,14 +30,14 @@ export function BlockProvider({ children }: { children: ReactNode }) {
 			const slotLeadersLimit = Number(lastLeaderSlot - block.parentSlot + BigInt(1));
 			leaders = await getSlotLeaders(firstLeaderSlot, slotLeadersLimit);
 
-			const getLeader = (slot: number) => {
+			const getLeader = (slot: bigint) => {
 				return leaders?.at(Number(BigInt(slot) - firstLeaderSlot));
 			};
 
-			const data = {
+			const data: Block = {
 				block,
-				blockLeader: getLeader(Number(slot)),
-				childLeader: childSlot !== undefined ? getLeader(Number(childSlot)) : undefined,
+				blockLeader: getLeader(slot),
+				childLeader: childSlot !== undefined ? getLeader(childSlot) : undefined,
 				childSlot,
 				parentLeader: getLeader(block.parentSlot),
 			};
