@@ -2,7 +2,7 @@ import { useBlock } from '@/providers/block';
 import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
 import { Table, TableBody, TableRow, TableCell } from './ui/table';
 import { useEffect } from 'react';
-import { Alert, AlertDescription } from './ui/alert'; // Add this import
+import { Alert, AlertDescription } from './ui/alert';
 import { FetchStatus } from '@/utils/types';
 import { useParams } from 'next/navigation';
 
@@ -21,7 +21,10 @@ export default function BlockInfoCard() {
 			<Card>
 				<CardContent className="p-6">
 					<div className="flex items-center justify-center">
-						<div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" />
+						<div
+							role="status"
+							aria-label="Loading"
+							className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" />
 					</div>
 				</CardContent>
 			</Card>

@@ -25,7 +25,10 @@ export default function TransactionsCard() {
 			<Card>
 				<CardContent className="p-6">
 					<div className="flex items-center justify-center">
-						<div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" />
+						<div
+							role="status"
+							aria-label="Loading"
+							className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" />
 					</div>
 				</CardContent>
 			</Card>
