@@ -5,20 +5,8 @@ import { Button } from './ui/button';
 import { useBlock } from '@/providers/block';
 import { useEffect, useState } from 'react';
 import { Alert, AlertDescription } from './ui/alert';
-import { FetchStatus } from '@/utils/types';
-import { TransactionError } from '@solana/web3.js';
+import { FetchStatus, TransactionWithMeta } from '@/utils/types';
 import { useParams } from 'next/navigation';
-
-interface TransactionWithMeta {
-	transaction: {
-		signatures: string[];
-	};
-	meta: {
-		fee: number;
-		err: TransactionError | null;
-		computeUnitsConsumed?: number;
-	};
-}
 
 export default function TransactionsCard() {
 	const { slot } = useParams();

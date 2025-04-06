@@ -1,4 +1,4 @@
-import { UnixTimestamp } from "@solana/web3.js";
+import { Transaction, TransactionError, UnixTimestamp } from "@solana/web3.js";
 
 export type EpochSchedule = {
 	slotsPerEpoch: bigint;
@@ -31,6 +31,7 @@ export interface BlockData {
 	previousBlockhash: string;
 	blockTime: UnixTimestamp | null;
 	blockHeight: bigint | null;
+	transactions: Array<TransactionWithMeta>;
 }
 
 export interface Block {
@@ -39,4 +40,23 @@ export interface Block {
 	childLeader?: string;
 	childSlot?: bigint;
 	parentLeader?: string;
+}
+
+export interface TransactionWithMeta {
+	transaction: Transaction;
+	meta: {
+		err: null | TransactionError;
+		fee: number;
+		innerInstructions: Array<unknown>;
+		logMessages: Array<string>;
+		postBalances: Array<number>;
+		postTokenBalances: Array<unknown>;
+		preBalances: Array<number>;
+		preTokenBalances: Array<unknown>;
+		rewards: null | Array<unknown>;
+		status: {
+			Ok: null | object;
+		};
+		computeUnitsConsumed: number | undefined;
+	};
 }
