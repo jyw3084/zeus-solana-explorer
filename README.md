@@ -2,6 +2,10 @@
 
 A modern web application for exploring the Solana blockchain with real-time data and analytics.
 
+## Live Demo
+
+[![Live Demo](https://img.shields.io/badge/Live-Demo-blue?style=for-the-badge)](https://e252ca00.zeus-solana-explorer.pages.dev/)
+
 ## Architecture
 
 ### Tech Stack
@@ -36,8 +40,6 @@ cd zeus-solana-explorer
 2. Install dependencies:
 ```bash
 npm install
-# or
-pnpm install
 ```
 
 ## Development
@@ -46,8 +48,6 @@ Run the development server:
 
 ```bash
 npm run dev
-# or
-pnpm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.
@@ -56,16 +56,12 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ```bash
 npm run build
-# or
-pnpm build
 ```
 
 To start the production server:
 
 ```bash
 npm run start
-# or
-pnpm start
 ```
 
 ## Configuration
@@ -80,8 +76,8 @@ cp .env.example .env
 
 ```env
 # Required: Solana Mainnet RPC endpoint
-NEXT_PUBLIC_MAINNET_RPC_URL=
+NEXT_PUBLIC_MAINNET_RPC_URL= <!-- Your Mainnet URL -->
 
 # Required: Solana Devnet RPC endpoint
-NEXT_PUBLIC_DEVNET_RPC_URL=
+NEXT_PUBLIC_DEVNET_RPC_URL= <!-- Your Devnet URL -->
 ```
