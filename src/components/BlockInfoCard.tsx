@@ -4,9 +4,11 @@ import { Table, TableBody, TableRow, TableCell } from './ui/table';
 import { useEffect } from 'react';
 import { Alert, AlertDescription } from './ui/alert'; // Add this import
 import { FetchStatus } from '@/utils/types';
+import { useParams } from 'next/navigation';
 
-export default function BlockInfoCard({ slot }: { slot: string }) {
-	const slotNum = BigInt(slot);
+export default function BlockInfoCard() {
+	const { slot } = useParams();
+	const slotNum = BigInt(Array.isArray(slot) ? slot[0] : slot);
 	const { blockInfo, getBlock, status } = useBlock();
 	const { block, blockLeader, parentLeader, childLeader, childSlot } = blockInfo || {};
 

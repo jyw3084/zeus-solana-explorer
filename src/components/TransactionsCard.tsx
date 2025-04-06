@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { Alert, AlertDescription } from './ui/alert';
 import { FetchStatus } from '@/utils/types';
 import { TransactionError } from '@solana/web3.js';
+import { useParams } from 'next/navigation';
 
 interface TransactionWithMeta {
 	transaction: {
@@ -19,8 +20,9 @@ interface TransactionWithMeta {
 	};
 }
 
-export default function TransactionsCard({ slot }: { slot: string }) {
-	const slotNum = BigInt(slot);
+export default function TransactionsCard() {
+	const { slot } = useParams();
+	const slotNum = BigInt(Array.isArray(slot) ? slot[0] : slot);
 	const { blockInfo, getBlock, status } = useBlock();
 	const { block } = blockInfo || {};
 
