@@ -1,18 +1,15 @@
 import React from 'react';
 import { BlockProvider } from '@/providers/block';
 
-interface LayoutProps {
+export default function BlockLayout({
+	children
+}: {
 	children: React.ReactNode;
-	params: { slot: string };
 }
-
-const Layout: React.FC<LayoutProps> = ({ children }) => {
-
+) {
 	return (
 		<BlockProvider>
 			{children}
 		</BlockProvider>
 	);
 };
-
-export default Layout;
