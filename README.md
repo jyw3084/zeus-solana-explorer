@@ -4,7 +4,7 @@ A modern web application for exploring the Solana blockchain with real-time data
 
 ## Live Demo
 
-[![Live Demo](https://img.shields.io/badge/Live-Demo-blue?style=for-the-badge)](https://e252ca00.zeus-solana-explorer.pages.dev/)
+[![Live Demo](https://img.shields.io/badge/Live-Demo-blue?style=for-the-badge)](https://zeus-solana-explorer.pages.dev/)
 
 ## Architecture
 
