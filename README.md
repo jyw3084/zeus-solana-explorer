@@ -81,3 +81,17 @@ NEXT_PUBLIC_MAINNET_RPC_URL= <!-- Your Mainnet URL -->
 # Required: Solana Devnet RPC endpoint
 NEXT_PUBLIC_DEVNET_RPC_URL= <!-- Your Devnet URL -->
 ```
+
+## Unit Tests
+
+Unit tests are used to ensure the correctness of individual components and functions in the application.
+
+### Running Unit Tests
+
+To run the unit tests, use the following command:
+
+```bash
+npm run test
+```
+
+This will execute all test files and display the results in the terminal.
